@@ -19,12 +19,12 @@ const SECTION_ID = (process.env.SECTION_ID != null) ? parseInt(process.env.SECTI
 const LABEL_ID = (process.env.LABEL_ID != null) ? parseInt(process.env.LABEL_ID) : null
 const WEEKS_TO_ADD = process.env.WEEKS_TO_ADD ?? 3
 
-const startingDate = dayjs().weekday(3)
+const startingDate = dayjs().weekday(2)
 
 const promises: Array<Promise<Task>> = []
 for (let i = 0; i < WEEKS_TO_ADD; i++) {
-  const dueDate = startingDate.add(7 * i, 'day').set('hour', 9).set('minute', 0).set('second', 0).set('millisecond', 0)
-  const notBefore = dueDate.subtract(2, 'day').set('hour', 15).set('minute', 0).set('second', 0).set('millisecond', 0)
+  const dueDate = startingDate.add(7 * i, 'day').set('hour', 18).set('minute', 0).set('second', 0).set('millisecond', 0)
+  const notBefore = dueDate.subtract(1, 'day').set('hour', 16).set('minute', 0).set('second', 0).set('millisecond', 0)
   const args = {
     content: 'Notulen lezen',
     description: `[2h] (notbefore ${notBefore.format('YYYY-MM-DD HH:mm')})`,
@@ -48,3 +48,7 @@ for (let i = 0; i < WEEKS_TO_ADD; i++) {
 const tasks = await Promise.all(promises)
 
 console.log(`Added ${tasks.length} tasks with ids ${tasks.map(t => t.id).toString()}`)
+
+if (DRY_RUN) {
+  console.warn('⚠️ DRY RUN! Did not actually add tasks')
+}
